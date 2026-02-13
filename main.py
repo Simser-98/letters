@@ -13,6 +13,17 @@ deltaTime = 0
 
 
 player = player.Player(20, "red", pygame.math.Vector2(screen.get_width()/2, screen.get_height()/2))
+initialBulletSpd = 5
+bulletLst = []
+bulletVel = []
+
+def bullet_update(bullet_lst, bullet_vel):
+
+    for i in range(len(bullet_lst)):
+        bullet_lst[i] = (bullet_lst[i][0] + bullet_vel[i][0], bullet_lst[i][1] + bullet_vel[i][1])
+
+    return bullet_lst
+
 
 
 while running:
@@ -27,8 +38,33 @@ while running:
 
     player.pos = utils.clamp_vector(player.pos, (0,0), resolution)
 
+    keys = pygame.key.get_pressed()
+
+    if keys[pygame.K_LEFT]:
+        bulletLst.append((player.pos[0], player.pos[1]))
+        bulletVel.append((-initialBulletSpd + player.vel[0], player.vel[1]))
+    elif keys[pygame.K_RIGHT]:
+        bulletLst.append((player.pos[0], player.pos[1]))
+        bulletVel.append((initialBulletSpd + player.vel[0], player.vel[1]))
+    elif keys[pygame.K_UP]:
+        bulletLst.append((player.pos[0], player.pos[1]))
+        bulletVel.append((player.vel[0], -initialBulletSpd + player.vel[1]))
+    elif keys[pygame.K_DOWN]:
+        bulletLst.append((player.pos[0], player.pos[1]))
+        bulletVel.append((player.vel[0], +initialBulletSpd + player.vel[1]))
+
+    bulletLst = bullet_update(bulletLst, bulletVel)
+
+    for i in range(len(bulletLst)):
+        pygame.draw.circle(screen, "white", (bulletLst[i][0], bulletLst[i][1]), 10)
+
     player.draw(screen)
-    player.move(deltaTime)
+    player.move(deltaTime, keys)
+
+
+
+
+
 
 
 

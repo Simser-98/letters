@@ -26,6 +26,11 @@ def bullet_update(bullet_lst, bullet_vel):
 
     for i in range(len(bullet_lst)):
         bullet_lst[i] = (bullet_lst[i][0] + bullet_vel[i][0], bullet_lst[i][1] + bullet_vel[i][1])
+        print(bullet_lst[i])
+        if 0 > bullet_lst[i][0] or bullet_lst[i][0] > 1280 or 0 > bullet_lst[i][1] or bullet_lst[i][1] > 720:
+            del bullet_lst[i]
+            i -= 1
+
 
     return bullet_lst
 
@@ -80,7 +85,6 @@ while running:
 
 
     pygame.display.flip()
-
     deltaTime = clock.tick() / 1000
     deltaTime = max(min(deltaTime, 0.1), 0.001)
 

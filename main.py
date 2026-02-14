@@ -62,7 +62,7 @@ while running:
             bulletVel.append((player.vel[0], (+initialBulletSpd + player.vel[1])))
         timer = 0
 
-    bulletLst = bullet_update(bulletLst, bulletVel, deltaTime)
+    bulletLst = bullet_update(bulletLst, bulletVel)
 
     for bullet in bulletLst:
         pygame.draw.circle(screen, "white", (bullet[0], bullet[1]), 10)

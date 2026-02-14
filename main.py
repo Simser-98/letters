@@ -18,18 +18,17 @@ timer = 0
 
 player = player.Player(20, "red", pygame.math.Vector2(screen.get_width()/2, screen.get_height()/2))
 firingRate = 3
-initialBulletSpd = 0.75
+initialBulletSpd = 0.70
 bulletLst = []
 bulletVel = []
 
 def bullet_update(bullet_lst, bullet_vel):
 
-    for i in range(len(bullet_lst)):
+    for i in range(len(bullet_lst) - 1, -1, -1):
         bullet_lst[i] = (bullet_lst[i][0] + bullet_vel[i][0], bullet_lst[i][1] + bullet_vel[i][1])
-        print(bullet_lst[i])
         if 0 > bullet_lst[i][0] or bullet_lst[i][0] > 1280 or 0 > bullet_lst[i][1] or bullet_lst[i][1] > 720:
             del bullet_lst[i]
-            i -= 1
+            del bullet_vel[i]
 
 
     return bullet_lst
@@ -50,22 +49,26 @@ while running:
     player.pos = utils.clamp_vector(player.pos, (0,0), resolution)
 
     keys = pygame.key.get_pressed()
-
     if keys and timer >= 1/firingRate:
 
         if keys[pygame.K_LEFT]:
             bulletLst.append((player.pos[0], player.pos[1]))
             bulletVel.append((-initialBulletSpd + player.vel[0], player.vel[1]))
+            timer = 0
         elif keys[pygame.K_RIGHT]:
             bulletLst.append((player.pos[0], player.pos[1]))
             bulletVel.append(((initialBulletSpd + player.vel[0]), player.vel[1]))
+            timer = 0
         elif keys[pygame.K_UP]:
             bulletLst.append((player.pos[0], player.pos[1]))
             bulletVel.append((player.vel[0], (-initialBulletSpd + player.vel[1])))
+            timer = 0
         elif keys[pygame.K_DOWN]:
             bulletLst.append((player.pos[0], player.pos[1]))
             bulletVel.append((player.vel[0], (+initialBulletSpd + player.vel[1])))
-        timer = 0
+            timer = 0
+
+
 
     bulletLst = bullet_update(bulletLst, bulletVel)
 
